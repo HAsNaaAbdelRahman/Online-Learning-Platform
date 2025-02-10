@@ -10,12 +10,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
+    <PackageReference Include="NPOI" Version="2.7.2" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Online Learning Platform.Core\Online Learning Platform.Core.csproj" />
     <ProjectReference Include="..\Online Learning Platform.Repository\Online Learning Platform.Repository.csproj" />
+    <ProjectReference Include="..\Online Learning Platform\Online Learning Platform.APIs.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,40 +8,35 @@ using System.Threading.Tasks;
 
 namespace Online_Learning_Platform.Services
 {
-    public class AdminServices<T> : IAdminServices<T> where T : class
+    public class InstructorServices<T> : IInstructorServices<T> where T : class
     {
-        protected readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public AdminServices(ApplicationDbContext context)
+        public InstructorServices(ApplicationDbContext context)
         {
             _context = context;
         }
-        public T AddCourseService(AddNewCourse courseDTO)
+        public T AddLessons(AddLessonsIntoModules AddLessonsDto)
         {
             throw new NotImplementedException();
         }
 
-        public T DeleteOutDatedService(string Id)
+        public T AddModules(AddModulesInToCourse AddModule)
         {
             throw new NotImplementedException();
         }
 
-        public T GetAllCoursesService()
+        public T EditCourseDetails(string Id, UpdateCourseDetails CourseDto)
         {
             throw new NotImplementedException();
         }
 
-        public T GetAllStudentService()
+        public T GetAllStudentByCourseId(string Id)
         {
             throw new NotImplementedException();
         }
 
-        public T GetCoursesByTypeService(string type)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T UpdateCourseService(string Id, UpdateCourseInfoDto Updatedto)
+        public T GetProgressInCourse(string UserId, string CourseId)
         {
             throw new NotImplementedException();
         }
