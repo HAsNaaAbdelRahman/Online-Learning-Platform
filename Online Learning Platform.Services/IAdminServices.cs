@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Online_Learning_Platform.Core.Models;
 using Online_Learning_Platform.DTO;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,11 @@ namespace Online_Learning_Platform.Services
 {
     public interface IAdminServices <T> where T : class
     {
-        
-        T  GetAllCoursesService();
-        T GetCoursesByTypeService(string type);
-        T AddCourseService(AddNewCourse courseDTO);
-        T GetAllStudentService();
-        T UpdateCourseService(string Id, UpdateCourseInfoDto Updatedto);
-        T DeleteOutDatedService(string Id);
+
+        Task<IEnumerable<T>> GetAllCoursesService();
+        Task<IEnumerable<T>> GetCoursesByTypeService(string type);
+        Task<T> AddCourseService(T courseDTO);
+        Task<T> UpdateCourseService(string Id, T Updatedto);
+        Task<T> DeleteOutDatedService(string Id);
     }
 }

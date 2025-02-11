@@ -1,4 +1,6 @@
-﻿using Online_Learning_Platform.DTO;
+﻿using Microsoft.EntityFrameworkCore;
+using Online_Learning_Platform.Core.Models;
+using Online_Learning_Platform.DTO;
 using Online_Learning_Platform.Repository.Data;
 using System;
 using System.Collections.Generic;
@@ -8,42 +10,56 @@ using System.Threading.Tasks;
 
 namespace Online_Learning_Platform.Services
 {
-    public class AdminServices<T> : IAdminServices<T> where T : class
+    public class AdminServices : IAdminServices<Course> 
     {
         protected readonly ApplicationDbContext _context;
-
         public AdminServices(ApplicationDbContext context)
         {
             _context = context;
         }
-        public T AddCourseService(AddNewCourse courseDTO)
+
+
+        public async Task<Course> AddCourseService(Course courseDTO)
         {
-            throw new NotImplementedException();
+            await _context.AddAsync(courseDTO);
+            return courseDTO;
         }
 
-        public T DeleteOutDatedService(string Id)
+        public async Task<Course> DeleteOutDatedService(string Id)
         {
-            throw new NotImplementedException();
+            var res = await _context.courses.FirstOrDefaultAsync(c => c.Id == Id);
+            if (res != null)
+                _context.courses.Remove(res);
+            return res;
         }
 
-        public T GetAllCoursesService()
+        public async Task<IEnumerable<Course>> GetAllCoursesService()
         {
-            throw new NotImplementedException();
+            return await _context.courses.ToListAsync();
         }
 
-        public T GetAllStudentService()
+        public async Task<IEnumerable<Course>> GetCoursesByTypeService(string type)
         {
-            throw new NotImplementedException();
+            return await _context.courses
+                         .Where(i => i.Type.ToLower() == type.ToLower())
+                         .ToListAsync();
         }
 
-        public T GetCoursesByTypeService(string type)
+        public async Task<Course> UpdateCourseService(string Id, Course Updatedto)
         {
-            throw new NotImplementedException();
+            var course = await _context.courses.FirstOrDefaultAsync(i => i.Id == Id);
+
+            if (course != null)
+            {
+                course.Name = Updatedto.Name;
+                course.Description = Updatedto.Description;
+                course.Type = Updatedto.Type;
+            }
+            return course;
         }
 
-        public T UpdateCourseService(string Id, UpdateCourseInfoDto Updatedto)
-        {
-            throw new NotImplementedException();
-        }
+
+
+
     }
 }

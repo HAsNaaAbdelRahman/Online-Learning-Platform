@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Online_Learning_Platform.Core.Models;
 using Online_Learning_Platform.DTO;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,11 @@ namespace Online_Learning_Platform.Services
 {
     public interface IInstructorServices<T> where T : class
     {
-        T GetAllStudentByCourseId(string Id);
-        T GetProgressInCourse(string UserId, string CourseId);
-        T AddModules(AddModulesInToCourse AddModule);
-        T AddLessons(AddLessonsIntoModules AddLessonsDto);
-        T EditCourseDetails(string Id, UpdateCourseDetails CourseDto);
+        //Task<User> GetAllStudentByCourseId(string Id);
+        Task<string> GetProgressInCourse(string UserId, string CourseId);
+        Task<Module> AddModules(AddModulesInToCourse AddModule);
+        Task<Lesson> AddLessons(AddLessonsIntoModules AddLessonsDto);
+        Task<Course> EditCourseDetails(string Id, UpdateCourseDetails CourseDto);
 
     }
 }

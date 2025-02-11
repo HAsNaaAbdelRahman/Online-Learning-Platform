@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Online_Learning_Platform.Core.Models;
 using Online_Learning_Platform.DTO;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,9 @@ namespace Online_Learning_Platform.Services
 {
     public interface IStudentServices<T> where T : class
     {
-        T GetAllCourses();
-        T GetCoursesByType(string type);
-        T GetProgressInCourse(string CourseId);
-        T Enroll(EnrollmentRequest enrollment);
+        Task<IEnumerable<Course>> GetAllCourses();
+        Task<IEnumerable<Course>> GetCoursesByType(string type);
+        Task<string> GetProgressInCourse(string CourseId);
+        Task<Enrollment> Enroll(EnrollmentRequest enrollment);
     }
 }

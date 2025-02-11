@@ -75,26 +75,6 @@ namespace Online_Learning_Platform.Controllers
 
             return Ok(course);
         }
-
-        [HttpGet("GetAllStudent")]
-        public async Task<IActionResult> GetAllStudent()
-        {
-            var StudentId = await _context.Roles
-              .Where(i => i.Name == "Student")
-              .Select(i => i.Id)
-              .FirstOrDefaultAsync();
-            var users = await _context.UserRoles
-            .Where(ur => ur.RoleId == StudentId)
-            .Join(_context.Users,
-                  ur => ur.UserId,
-                  u => u.Id,
-                  (ur, u) => u)
-            .ToListAsync();
-
-            return Ok(users);
-
-        }
-
         [HttpPut("UpdateCourse/{Id}")]
         public async Task<IActionResult> UpdateCourse([FromRoute]string Id,[FromForm] UpdateCourseInfoDto Updatedto)
         {
@@ -125,6 +105,26 @@ namespace Online_Learning_Platform.Controllers
             return Ok(course);
         }
 
-        
-     }
+
+        //[HttpGet("GetAllStudent")]
+        //public async Task<IActionResult> GetAllStudent()
+        //{
+        //    var StudentId = await _context.Roles
+        //      .Where(i => i.Name == "Student")
+        //      .Select(i => i.Id)
+        //      .FirstOrDefaultAsync();
+        //    var users = await _context.UserRoles
+        //    .Where(ur => ur.RoleId == StudentId)
+        //    .Join(_context.Users,
+        //          ur => ur.UserId,
+        //          u => u.Id,
+        //          (ur, u) => u)
+        //    .ToListAsync();
+
+        //    return Ok(users);
+
+        //}
+
+
+    }
 }
