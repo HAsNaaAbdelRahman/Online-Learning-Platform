@@ -16,8 +16,8 @@ a web-based platform that allows users to browse courses, enroll, and track thei
 - **Add Course Modules**: Introduce new modules for a course.
 - **Add Lessons**: Attach lessons to existing courses.
 - **Edit Course Details**: Update course information, such as description and syllabus.
-- 
-##Student Module
+  
+## Student Module
 - **Enroll in Courses**: Students can search and register for courses.
 - **Track Progress**: View progress and lesson completion for enrolled courses.
 - **Access Course Material**: Read lessons and access course content directly.
