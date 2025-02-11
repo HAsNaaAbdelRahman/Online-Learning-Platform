@@ -7,6 +7,7 @@ using Online_Learning_Platform.Helper;
 using Online_Learning_Platform.Repository.Data;
 using System.Text;
 using System.Text.Json.Serialization;
+using Online_Learning_Platform;
 namespace Online_Learning_Platform
 {
     public class Program
@@ -16,6 +17,7 @@ namespace Online_Learning_Platform
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            
             builder.Services.AddAuthentication()
              .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
             {
@@ -30,6 +32,7 @@ namespace Online_Learning_Platform
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT.SigningKey))
                 };
             });
+            
             builder.Services.AddAuthorization();
             builder.Services.AddControllers()
             .AddJsonOptions(options =>
@@ -43,6 +46,12 @@ namespace Online_Learning_Platform
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            builder.Services.AddEndpointsApiExplorer();
+
+            //builder.Services.AddTransient<IAdminServices, AdminServices>();
+            //builder.Services.AddTransient<IStudentServices, StudentServices>();
+            //builder.Services.AddTransient<IInstructorServices, InstructorServices>();
+
 
             // Configure the database context
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
