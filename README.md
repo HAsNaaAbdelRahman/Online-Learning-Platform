@@ -22,4 +22,11 @@ a web-based platform that allows users to browse courses, enroll, and track thei
 - **Track Progress**: View progress and lesson completion for enrolled courses.
 - **Access Course Material**: Read lessons and access course content directly.
 
-
+## Technologies Used
+- **Backend**: ASP.NET Core 8 for building robust and scalable APIs
+- **Frontend Testing**: Swagger UI for API documentation and testing
+- **Database**: SQL Server for efficient data storage and retrieval
+- **Entity Framework Core**: For object-relational mapping (ORM) and database management
+- **Authentication**: Secure user role-based access
+- **JSON**: Data format for API request and response handling
+- **C#**: Primary programming language for backend logic
