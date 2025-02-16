@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Online_Learning_Platform.Core.Models;
-using Online_Learning_Platform.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +13,6 @@ namespace Online_Learning_Platform.Services
         Task<IEnumerable<Course>> GetAllCourses();
         Task<IEnumerable<Course>> GetCoursesByType(string type);
         Task<string> GetProgressInCourse(string CourseId);
-        Task<Enrollment> Enroll(EnrollmentRequest enrollment);
+        Task<Enrollment> Enroll(T enrollment);
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Online_Learning_Platform.Core.Services.Contract;
 
 namespace Online_Learning_Platform.Services
 {
@@ -36,6 +37,10 @@ namespace Online_Learning_Platform.Services
             return Newenrollment;
         }
 
+        public Task<Enrollment> Enroll(T enrollment)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<IEnumerable<Course>> GetAllCourses()
         {

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Online_Learning_Platform.Core.Models;
+using Online_Learning_Platform.Core.Repositories.Contract;
 using Online_Learning_Platform.DTO;
 using Online_Learning_Platform.Repository.Data;
 using System.Linq;
@@ -104,26 +105,6 @@ namespace Online_Learning_Platform.Controllers
             await _context.SaveChangesAsync();
             return Ok(course);
         }
-
-
-        //[HttpGet("GetAllStudent")]
-        //public async Task<IActionResult> GetAllStudent()
-        //{
-        //    var StudentId = await _context.Roles
-        //      .Where(i => i.Name == "Student")
-        //      .Select(i => i.Id)
-        //      .FirstOrDefaultAsync();
-        //    var users = await _context.UserRoles
-        //    .Where(ur => ur.RoleId == StudentId)
-        //    .Join(_context.Users,
-        //          ur => ur.UserId,
-        //          u => u.Id,
-        //          (ur, u) => u)
-        //    .ToListAsync();
-
-        //    return Ok(users);
-
-        //}
 
 
     }

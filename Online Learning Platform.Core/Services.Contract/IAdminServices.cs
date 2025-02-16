@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Online_Learning_Platform.Core.Models;
-using Online_Learning_Platform.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace Online_Learning_Platform.Services
+namespace Online_Learning_Platform.Core.Services.Contract
 {
     public interface IAdminServices <T> where T : class
     {

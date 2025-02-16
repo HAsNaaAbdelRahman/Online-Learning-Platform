@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Online_Learning_Platform.Core.Services.Contract;
 
 namespace Online_Learning_Platform.Services
 {
@@ -33,6 +34,11 @@ namespace Online_Learning_Platform.Services
             return lesson;
         }
 
+        public Task<Lesson> AddLessons(T AddLessonsDto)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Module> AddModules(AddModulesInToCourse AddModule)
         {
             Module module = new Module
@@ -47,6 +53,11 @@ namespace Online_Learning_Platform.Services
             return module;
         }
 
+        public Task<Module> AddModules(T AddModule)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Course> EditCourseDetails(string Id, UpdateCourseDetails CourseDto)
         {
             var OldDetail = await _context.courses.FirstOrDefaultAsync(i => i.Id == Id);
@@ -54,6 +65,11 @@ namespace Online_Learning_Platform.Services
             OldDetail.Description = CourseDto.Description;
             await _context.SaveChangesAsync();
             return OldDetail;
+        }
+
+        public Task<Course> EditCourseDetails(string Id, T CourseDto)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<string> GetProgressInCourse(string UserId, string CourseId)
