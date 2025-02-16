@@ -22,11 +22,11 @@ namespace Online_Learning_Platform.Controllers
     {
         private readonly ApplicationDbContext _context = context;
 
-        [HttpPost]
         private string AuthenticateUser(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(JWT.SigningKey);
+
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -38,13 +38,14 @@ namespace Online_Learning_Platform.Controllers
                 {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.UserName),
-            new Claim(ClaimTypes.Email, user.Email)
+            new Claim(ClaimTypes.Email, user.Email),
         })
             };
 
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(securityToken);
         }
+
 
         [HttpPost("Register")]
         public async Task<IActionResult> RegisterAsync([FromBody]UserRegisterDTO newUser)

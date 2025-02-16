@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Online_Learning_Platform.Core.Models;
-using Online_Learning_Platform.Helper;
-using Online_Learning_Platform.Repository.Data;
 using System.Text;
 using System.Text.Json.Serialization;
-using Online_Learning_Platform;
+using Online_Learning_Platform.Core.Models;
+using Online_Learning_Platform.Repository.Data;
+using Online_Learning_Platform.Helper;
+
 namespace Online_Learning_Platform
 {
     public class Program
@@ -16,56 +16,50 @@ namespace Online_Learning_Platform
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            
-            builder.Services.AddAuthentication()
-             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            {
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = JWT.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = JWT.Audience,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT.SigningKey))
-                };
-            });
-            
-            builder.Services.AddAuthorization();
-            builder.Services.AddControllers()
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-            });
-                    builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            var jwtSection = builder.Configuration.GetSection("JWT");
+            var jwtSettings = jwtSection.Get<JWT>();
+            builder.Services.AddSingleton(jwtSettings);
 
-            // Configure Identity with the custom User class
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = JWT.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = JWT.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JWT.SigningKey ?? "DefaultKey"))
+                    };
+                });
+
+            builder.Services.AddAuthorization();
+
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
-            builder.Services.AddEndpointsApiExplorer();
 
-            //builder.Services.AddTransient<IAdminServices, AdminServices>();
-            //builder.Services.AddTransient<IStudentServices, StudentServices>();
-            //builder.Services.AddTransient<IInstructorServices, InstructorServices>();
-
-
-            // Configure the database context
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            var Jwt = builder.Configuration.GetSection("JWT").Get<JWT>();
-            builder.Services.AddSingleton<JWT>(Jwt);    
-            // Configure CORS
             builder.Services.AddCors();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                });
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -73,30 +67,34 @@ namespace Online_Learning_Platform
             }
 
             app.UseHttpsRedirection();
-
-            // Enable authentication and authorization
             app.UseAuthentication();
             app.UseAuthorization();
-
-            // Configure CORS
-            app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-
             app.MapControllers();
 
-            // Initialize roles
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var roles = new[] { "Admin", "Instructor", "Student" };
-
-                foreach (var role in roles)
-                {
-                    if (!await roleManager.RoleExistsAsync(role))
-                        await roleManager.CreateAsync(new IdentityRole(role));
-                }
+                await SeedRolesAsync(roleManager);
             }
 
-            app.Run();
+            await app.RunAsync();
+        }
+
+        private static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            var roles = new[] { "Admin", "Instructor", "Student" };
+
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    var result = await roleManager.CreateAsync(new IdentityRole(role));
+                    if (!result.Succeeded)
+                    {
+                        Console.WriteLine($" Failed to create role: {role}");
+                    }
+                }
+            }
         }
     }
 }
