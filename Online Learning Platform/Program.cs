@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using Online_Learning_Platform.Core.Models;
 using Online_Learning_Platform.Repository.Data;
 using Online_Learning_Platform.Helper;
+using Microsoft.Extensions.Options;
 
 namespace Online_Learning_Platform
 {
@@ -45,6 +46,8 @@ namespace Online_Learning_Platform
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
             builder.Services.AddCors();
 
             builder.Services.AddControllers()
@@ -52,7 +55,7 @@ namespace Online_Learning_Platform
                 {
                     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 });
-
+                
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

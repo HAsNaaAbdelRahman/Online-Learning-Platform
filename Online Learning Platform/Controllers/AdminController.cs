@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +18,14 @@ namespace Online_Learning_Platform.Controllers
     public class AdminController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public AdminController(ApplicationDbContext context)
+        public AdminController(ApplicationDbContext context , IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
+
 
         [HttpGet("ShowAllCourses")]
         public async Task<IActionResult> GetAllCourses()
@@ -33,6 +37,7 @@ namespace Online_Learning_Platform.Controllers
             return Ok(courses);
 
         }
+
 
         [HttpGet("GetCoursesWithSpecificType/{type:alpha}")]
         public async Task<IActionResult> GetCoursesByType([FromRoute] string type)
@@ -53,7 +58,8 @@ namespace Online_Learning_Platform.Controllers
             return Ok(Courses);
         }
 
-        [HttpPost("AddNewCourse")] 
+        [HttpPost("AddNewCourse")]
+
         public async Task<IActionResult> AddCourse([FromForm] AddNewCourse courseDTO)
         {
             if (courseDTO == null)
@@ -61,15 +67,7 @@ namespace Online_Learning_Platform.Controllers
             if(courseDTO.Name == null)
                 return BadRequest("course's Name is Required");
 
-            var course = new Course
-            {
-                Name = courseDTO.Name,
-                Description = courseDTO.Description,
-                StartDate = courseDTO.StartDate,
-                EndDate = courseDTO.EndDate,
-                Type = courseDTO.Type,
-
-            }; 
+            var course = _mapper.Map<Course>(courseDTO);
           await _context.AddAsync(course);
             _context.SaveChanges();
 
@@ -77,6 +75,7 @@ namespace Online_Learning_Platform.Controllers
             return Ok(course);
         }
         [HttpPut("UpdateCourse/{Id}")]
+
         public async Task<IActionResult> UpdateCourse([FromRoute]string Id,[FromForm] UpdateCourseInfoDto Updatedto)
         {
           
@@ -84,16 +83,12 @@ namespace Online_Learning_Platform.Controllers
 
             if (course == null)
                 return NotFound("Cannot find course with this id");
-            course.Name = Updatedto.Name;
-             course.Description = Updatedto.Description;
-             course.Type = Updatedto.Type;
-                
+            _mapper.Map(Updatedto, course);
             await _context.SaveChangesAsync(); 
             return Ok(course);
-            
-
         }
-        [HttpDelete("DeleteCourseById/{Id}")] 
+        [HttpDelete("DeleteCourseById/{Id}")]
+
         public async Task<IActionResult> DeleteOutDated([FromRoute] string Id)
         {
             var course = await _context.courses.FirstOrDefaultAsync(i => i.Id == Id);

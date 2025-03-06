@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,13 @@ namespace Online_Learning_Platform.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
 
-        public InstructorController(ApplicationDbContext context)
+
+        public InstructorController(ApplicationDbContext context , IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet("GetAllStudentByCourseId/{Id}")]
@@ -72,13 +76,7 @@ namespace Online_Learning_Platform.Controllers
         {
             if (AddModule == null)
                 return BadRequest("Can not add empty module in course.");
-            Module module = new Module
-            {
-               Name = AddModule.Name,
-               Description = AddModule.Description,
-               CourseId = AddModule.CourseId,
-
-            };
+            var module = _mapper.Map<Module>(AddModule);
             await _context.AddAsync(module);
             await _context.SaveChangesAsync();
             return Ok(module);
@@ -88,13 +86,7 @@ namespace Online_Learning_Platform.Controllers
         {
             if (AddLessonsDto == null)
                 return BadRequest("Can not add empty lesson in module.");
-            Lesson lesson = new Lesson
-            {
-                Name = AddLessonsDto.Name,
-                Description = AddLessonsDto.Description,
-                ModuleId = AddLessonsDto.ModuleId,
-
-            };
+            var lesson = _mapper.Map<Lesson>(AddLessonsDto);
             await _context.AddAsync(lesson);
             await _context.SaveChangesAsync();
             return Ok(lesson);
@@ -107,7 +99,7 @@ namespace Online_Learning_Platform.Controllers
             {
                 return BadRequest($"Cannot find a course with this {Id}");
             }
-            OldDetail.Description = CourseDto.Description;
+            _mapper.Map(CourseDto, OldDetail);
             await _context.SaveChangesAsync();
             return Ok(OldDetail);
         }
