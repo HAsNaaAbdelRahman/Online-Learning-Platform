@@ -10,7 +10,7 @@ namespace Online_Learning_Platform.Helper
         {
             CreateMap<Enrollment, EnrollmentRequest>()
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-                .ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.CourseId));
+                .ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.CourseId)).ReverseMap();
         }
     }
 }

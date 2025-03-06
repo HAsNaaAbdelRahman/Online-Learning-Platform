@@ -13,21 +13,18 @@ namespace Online_Learning_Platform.Helper
                 .ForMember(dest => dest.Description , opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
-                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate));
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate)).ReverseMap();
 
             CreateMap<Course, UpdateCourseDetails>()
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description)).ReverseMap();
 
             CreateMap<Course , UpdateCourseInfoDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
-                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate));
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate)).ReverseMap();
 
-            CreateMap<AddNewCourse, Course>();
-            CreateMap<UpdateCourseInfoDto, Course>();
-            CreateMap<UpdateCourseDetails , Course>();
 
 
         }

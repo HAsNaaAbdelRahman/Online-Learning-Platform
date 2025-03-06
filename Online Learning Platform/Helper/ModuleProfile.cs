@@ -11,8 +11,7 @@ namespace Online_Learning_Platform.Helper
             CreateMap<Module, AddModulesInToCourse>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.CourseId));
-            CreateMap<AddModulesInToCourse, Module>();
+                .ForMember(dest => dest.CourseId, opt => opt.MapFrom(src => src.CourseId)).ReverseMap();
 
         }
     }
